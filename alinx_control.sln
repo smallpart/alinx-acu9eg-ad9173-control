@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32922.545
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "alinx_control", "alinx_control\alinx_control.csproj", "{633673E5-6ACC-492F-8788-0F240714B03C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{633673E5-6ACC-492F-8788-0F240714B03C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{633673E5-6ACC-492F-8788-0F240714B03C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{633673E5-6ACC-492F-8788-0F240714B03C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{633673E5-6ACC-492F-8788-0F240714B03C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A45ED21A-3653-44EC-9760-8F38B3EA2A66}
+	EndGlobalSection
+EndGlobal
