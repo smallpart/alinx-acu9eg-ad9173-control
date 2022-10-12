@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace alinx_control
@@ -16,6 +18,16 @@ namespace alinx_control
         public Form1()
         {
             InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            // Вывод версии ПО
+            int major = Assembly.GetExecutingAssembly().GetName().Version.Major;
+            int minor = Assembly.GetExecutingAssembly().GetName().Version.Minor;
+            int build = Assembly.GetExecutingAssembly().GetName().Version.Build;
+            int revision = Assembly.GetExecutingAssembly().GetName().Version.Revision;
+            this.Text += " (version " + major.ToString() + "." + minor.ToString() + "." + build.ToString() + ")";
 
             try
             {
@@ -35,41 +47,13 @@ namespace alinx_control
                 MessageBox.Show(ex.Message, "Error!");
             }
 
-            // Отключение Ref Out
+            // Set default values
+            textBoxRefFreq.Text = "3000";
+            textBoxFreq1.Text = "1235.4";
+            textBoxFreq2.Text = "100";
+            textBoxAmp1.Text = "50ff";
+            textBoxAmp2.Text = "50ff";
             comboBoxRefOut.SelectedIndex = 3;
-        }
-
-        private void textBoxFreq1_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                Double freq = Convert.ToDouble(textBoxFreq1.Text);
-                Double refFreq = Convert.ToDouble(textBoxRefFreq.Text);
-
-                UInt64 code = Convert.ToUInt64(Math.Round(Math.Pow(2, 48) * (freq / refFreq)));
-
-                byte[] data = new byte[12];
-                foreach (byte b in data)
-                {
-                    data[b] = 0x00;
-                }
-                data[0] = 0x24;
-                data[2] = 0x00;
-                data[4] = Convert.ToByte((code >> 0) & 0xff);
-                data[5] = Convert.ToByte((code >> 8) & 0xff);
-                data[6] = Convert.ToByte((code >> 16) & 0xff);
-                data[7] = Convert.ToByte((code >> 24) & 0xff);
-                data[8] = Convert.ToByte((code >> 32) & 0xff);
-                data[9] = Convert.ToByte((code >> 40) & 0xff);
-
-                if (deviceIsConnect)
-                {
-                    serialPort.Write(data, 0, data.Length);
-                }
-            } catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
         }
 
         private void comboBoxNamePort_SelectedIndexChanged(object sender, EventArgs e)
@@ -111,7 +95,17 @@ namespace alinx_control
                     buttonConnect.Text = "Отключить";
                     comboBoxNamePort.Enabled = false;
                     deviceIsConnect = true;
-                } catch (Exception ex)
+
+                    // Send parameters to device
+                    KeyEventArgs ke = new KeyEventArgs(Keys.Enter);
+                    textBoxRefFreq_KeyUp(sender, ke);
+                    textBoxAmp1_KeyUp(sender, ke);
+                    textBoxAmp2_KeyUp(sender, ke);
+                    comboBoxRefOut_SelectedIndexChanged(sender, e);
+                    checkBoxChannel1_CheckedChanged(sender, e);
+                    checkBoxChannel2_CheckedChanged(sender, e);
+                } 
+                catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
@@ -131,102 +125,20 @@ namespace alinx_control
             }
         }
 
-        private void textBoxFreq2_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                Double freq = Convert.ToDouble(textBoxFreq2.Text);
-                Double refFreq = Convert.ToDouble(textBoxRefFreq.Text);
-
-                UInt64 code = Convert.ToUInt64((freq / refFreq) * Math.Pow(2, 48));
-
-                byte[] data = new byte[12];
-                foreach (byte b in data)
-                {
-                    data[b] = 0x00;
-                }
-                data[0] = 0x24;
-                data[2] = 0x01;
-                data[4] = Convert.ToByte((code >> 0) & 0xff);
-                data[5] = Convert.ToByte((code >> 8) & 0xff);
-                data[6] = Convert.ToByte((code >> 16) & 0xff);
-                data[7] = Convert.ToByte((code >> 24) & 0xff);
-                data[8] = Convert.ToByte((code >> 32) & 0xff);
-                data[9] = Convert.ToByte((code >> 40) & 0xff);
-
-                if (deviceIsConnect)
-                {
-                    serialPort.Write(data, 0, data.Length);
-                }
-            } catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        private void textBoxAmp1_TextChanged(object sender, EventArgs e)
-        {
-            if (textBoxAmp1.Text == String.Empty)
-            {
-                return;
-            }
-
-            try
-            {
-                UInt16 amp = Convert.ToUInt16(textBoxAmp1.Text, 16);
-
-                byte[] data = new byte[6];
-                foreach (byte b in data)
-                {
-                    data[b] = 0x00;
-                }
-                data[0] = 0x25;
-                data[2] = 0x00;
-                data[4] = Convert.ToByte((amp >> 0) & 0xff);
-                data[5] = Convert.ToByte((amp >> 8) & 0xff);
-
-                if (deviceIsConnect)
-                {
-                    serialPort.Write(data, 0, data.Length);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        private void textBoxAmp2_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                UInt16 amp = Convert.ToUInt16(textBoxAmp2.Text, 16);
-
-                byte[] data = new byte[6];
-                foreach (byte b in data)
-                {
-                    data[b] = 0x00;
-                }
-                data[0] = 0x25;
-                data[2] = 0x01;
-                data[4] = Convert.ToByte((amp >> 0) & 0xff);
-                data[5] = Convert.ToByte((amp >> 8) & 0xff);
-
-                if (deviceIsConnect)
-                {
-                    serialPort.Write(data, 0, data.Length);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
         private void buttonReset_Click(object sender, EventArgs e)
         {
             try
             {
+                // Send parameters to device
+                KeyEventArgs ke = new KeyEventArgs(Keys.Enter);
+                textBoxRefFreq_KeyUp(sender, ke);
+                textBoxAmp1_KeyUp(sender, ke);
+                textBoxAmp2_KeyUp(sender, ke);
+                comboBoxRefOut_SelectedIndexChanged(sender, e);
+                checkBoxChannel1_CheckedChanged(sender, e);
+                checkBoxChannel2_CheckedChanged(sender, e);
+
+                // Send command "Reset"
                 byte[] data = new byte[6];
                 foreach (byte b in data)
                 {
@@ -330,9 +242,250 @@ namespace alinx_control
             }
         }
 
+        private void textBoxFreq2_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                try
+                {
+                    Double freq = Convert.ToDouble(textBoxFreq2.Text);
+                    Double refFreq = Convert.ToDouble(textBoxRefFreq.Text);
+
+                    UInt64 code = Convert.ToUInt64((freq / refFreq) * Math.Pow(2, 48));
+
+                    byte[] data = new byte[12];
+                    foreach (byte b in data)
+                    {
+                        data[b] = 0x00;
+                    }
+                    data[0] = 0x24;
+                    data[2] = 0x01;
+                    data[4] = Convert.ToByte((code >> 0) & 0xff);
+                    data[5] = Convert.ToByte((code >> 8) & 0xff);
+                    data[6] = Convert.ToByte((code >> 16) & 0xff);
+                    data[7] = Convert.ToByte((code >> 24) & 0xff);
+                    data[8] = Convert.ToByte((code >> 32) & 0xff);
+                    data[9] = Convert.ToByte((code >> 40) & 0xff);
+
+                    textBoxFreq2.Select(0, textBoxFreq2.Text.Length);
+
+                    if (deviceIsConnect)
+                    {
+                        serialPort.Write(data, 0, data.Length);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+        private void textBoxFreq1_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                try
+                {
+                    Double freq = Convert.ToDouble(textBoxFreq1.Text);
+                    Double refFreq = Convert.ToDouble(textBoxRefFreq.Text);
+
+                    UInt64 code = Convert.ToUInt64(Math.Round(Math.Pow(2, 48) * (freq / refFreq)));
+
+                    byte[] data = new byte[12];
+                    foreach (byte b in data)
+                    {
+                        data[b] = 0x00;
+                    }
+                    data[0] = 0x24;
+                    data[2] = 0x00;
+                    data[4] = Convert.ToByte((code >> 0) & 0xff);
+                    data[5] = Convert.ToByte((code >> 8) & 0xff);
+                    data[6] = Convert.ToByte((code >> 16) & 0xff);
+                    data[7] = Convert.ToByte((code >> 24) & 0xff);
+                    data[8] = Convert.ToByte((code >> 32) & 0xff);
+                    data[9] = Convert.ToByte((code >> 40) & 0xff);
+
+                    textBoxFreq1.Select(0, textBoxFreq1.Text.Length);
+
+                    if (deviceIsConnect)
+                    {
+                        serialPort.Write(data, 0, data.Length);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+        private void textBoxRefFreq_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                try
+                {
+                    Double refFreq = Convert.ToDouble(textBoxRefFreq.Text);
+                    Double freq1 = Convert.ToDouble(textBoxFreq1.Text);
+                    Double freq2 = Convert.ToDouble(textBoxFreq2.Text);
+
+                    UInt64 code1 = Convert.ToUInt64(Math.Round(Math.Pow(2, 48) * (freq1 / refFreq)));
+                    UInt64 code2 = Convert.ToUInt64(Math.Round(Math.Pow(2, 48) * (freq2 / refFreq)));
+
+                    byte[] data1 = new byte[12];
+                    foreach (byte b in data1)
+                    {
+                        data1[b] = 0x00;
+                    }
+                    data1[0] = 0x24;
+                    data1[2] = 0x00;
+                    data1[4] = Convert.ToByte((code1 >> 0) & 0xff);
+                    data1[5] = Convert.ToByte((code1 >> 8) & 0xff);
+                    data1[6] = Convert.ToByte((code1 >> 16) & 0xff);
+                    data1[7] = Convert.ToByte((code1 >> 24) & 0xff);
+                    data1[8] = Convert.ToByte((code1 >> 32) & 0xff);
+                    data1[9] = Convert.ToByte((code1 >> 40) & 0xff);
+
+                    byte[] data2 = new byte[12];
+                    foreach (byte b in data2)
+                    {
+                        data2[b] = 0x00;
+                    }
+                    data2[0] = 0x24;
+                    data2[2] = 0x01;
+                    data2[4] = Convert.ToByte((code2 >> 0) & 0xff);
+                    data2[5] = Convert.ToByte((code2 >> 8) & 0xff);
+                    data2[6] = Convert.ToByte((code2 >> 16) & 0xff);
+                    data2[7] = Convert.ToByte((code2 >> 24) & 0xff);
+                    data2[8] = Convert.ToByte((code2 >> 32) & 0xff);
+                    data2[9] = Convert.ToByte((code2 >> 40) & 0xff);
+
+                    textBoxRefFreq.Select(0, textBoxRefFreq.Text.Length);
+
+                    if (deviceIsConnect)
+                    {
+                        serialPort.Write(data1, 0, data1.Length);
+                        serialPort.Write(data2, 0, data2.Length);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+        private void textBoxAmp1_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                try
+                {
+                    UInt16 amp = Convert.ToUInt16(textBoxAmp1.Text, 16);
+
+                    byte[] data = new byte[6];
+                    foreach (byte b in data)
+                    {
+                        data[b] = 0x00;
+                    }
+                    data[0] = 0x25;
+                    data[2] = 0x00;
+                    data[4] = Convert.ToByte((amp >> 0) & 0xff);
+                    data[5] = Convert.ToByte((amp >> 8) & 0xff);
+
+                    textBoxAmp1.Select(0, textBoxAmp1.Text.Length);
+
+                    if (deviceIsConnect)
+                    {
+                        serialPort.Write(data, 0, data.Length);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+        private void textBoxAmp2_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                try
+                {
+                    UInt16 amp = Convert.ToUInt16(textBoxAmp2.Text, 16);
+
+                    byte[] data = new byte[6];
+                    foreach (byte b in data)
+                    {
+                        data[b] = 0x00;
+                    }
+                    data[0] = 0x25;
+                    data[2] = 0x01;
+                    data[4] = Convert.ToByte((amp >> 0) & 0xff);
+                    data[5] = Convert.ToByte((amp >> 8) & 0xff);
+
+                    textBoxAmp2.Select(0, textBoxAmp2.Text.Length);
+
+                    if (deviceIsConnect)
+                    {
+                        serialPort.Write(data, 0, data.Length);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
         private void textBoxRefFreq_TextChanged(object sender, EventArgs e)
         {
+            TextBox tb = textBoxRefFreq;
 
+            if ((tb.Text.CompareTo(".") != -1) || (tb.Text.CompareTo(",") != -1))
+            {
+                int position = tb.SelectionStart;
+
+                tb.Text = tb.Text.Replace(".", Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+                tb.Text = tb.Text.Replace(",", Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+
+                tb.SelectionStart = position;
+                tb.SelectionLength = 0;
+            }
+        }
+
+        private void textBoxFreq1_TextChanged(object sender, EventArgs e)
+        {
+            TextBox tb = textBoxFreq1;
+
+            if ( (tb.Text.CompareTo(".") != -1) || (tb.Text.CompareTo(",") != -1) )
+            {
+                int position = tb.SelectionStart;
+
+                tb.Text = tb.Text.Replace(".", Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+                tb.Text = tb.Text.Replace(",", Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+
+                tb.SelectionStart = position;
+                tb.SelectionLength = 0;
+            }
+        }
+
+        private void textBoxFreq2_TextChanged(object sender, EventArgs e)
+        {
+            TextBox tb = textBoxFreq2;
+
+            if ((tb.Text.CompareTo(".") != -1) || (tb.Text.CompareTo(",") != -1))
+            {
+                int position = tb.SelectionStart;
+
+                tb.Text = tb.Text.Replace(".", Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+                tb.Text = tb.Text.Replace(",", Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+
+                tb.SelectionStart = position;
+                tb.SelectionLength = 0;
+            }
         }
     }
 }

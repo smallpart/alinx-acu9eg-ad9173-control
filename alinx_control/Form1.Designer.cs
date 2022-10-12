@@ -30,23 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupBoxConect = new System.Windows.Forms.GroupBox();
-            this.comboBoxNamePort = new System.Windows.Forms.ComboBox();
-            this.labelPort = new System.Windows.Forms.Label();
             this.buttonConnect = new System.Windows.Forms.Button();
+            this.labelPort = new System.Windows.Forms.Label();
+            this.comboBoxNamePort = new System.Windows.Forms.ComboBox();
             this.groupBoxDac = new System.Windows.Forms.GroupBox();
-            this.labelRefFreq = new System.Windows.Forms.Label();
-            this.textBoxRefFreq = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.labelRefOut = new System.Windows.Forms.Label();
-            this.comboBoxRefOut = new System.Windows.Forms.ComboBox();
-            this.buttonReset = new System.Windows.Forms.Button();
-            this.groupBoxChannel1 = new System.Windows.Forms.GroupBox();
-            this.labelFreq1 = new System.Windows.Forms.Label();
-            this.textBoxFreq1 = new System.Windows.Forms.TextBox();
-            this.labelAmp1 = new System.Windows.Forms.Label();
-            this.textBoxAmp1 = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.checkBoxChannel1 = new System.Windows.Forms.CheckBox();
             this.groupBoxChannel2 = new System.Windows.Forms.GroupBox();
             this.checkBoxChannel2 = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -54,11 +41,24 @@
             this.labelAmp2 = new System.Windows.Forms.Label();
             this.textBoxFreq2 = new System.Windows.Forms.TextBox();
             this.labelFreq2 = new System.Windows.Forms.Label();
+            this.groupBoxChannel1 = new System.Windows.Forms.GroupBox();
+            this.checkBoxChannel1 = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBoxAmp1 = new System.Windows.Forms.TextBox();
+            this.labelAmp1 = new System.Windows.Forms.Label();
+            this.textBoxFreq1 = new System.Windows.Forms.TextBox();
+            this.labelFreq1 = new System.Windows.Forms.Label();
+            this.buttonReset = new System.Windows.Forms.Button();
+            this.comboBoxRefOut = new System.Windows.Forms.ComboBox();
+            this.labelRefOut = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBoxRefFreq = new System.Windows.Forms.TextBox();
+            this.labelRefFreq = new System.Windows.Forms.Label();
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
             this.groupBoxConect.SuspendLayout();
             this.groupBoxDac.SuspendLayout();
-            this.groupBoxChannel1.SuspendLayout();
             this.groupBoxChannel2.SuspendLayout();
+            this.groupBoxChannel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxConect
@@ -73,16 +73,15 @@
             this.groupBoxConect.TabStop = false;
             this.groupBoxConect.Text = "Подключение";
             // 
-            // comboBoxNamePort
+            // buttonConnect
             // 
-            this.comboBoxNamePort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxNamePort.FormattingEnabled = true;
-            this.comboBoxNamePort.Location = new System.Drawing.Point(118, 19);
-            this.comboBoxNamePort.Name = "comboBoxNamePort";
-            this.comboBoxNamePort.Size = new System.Drawing.Size(78, 21);
-            this.comboBoxNamePort.TabIndex = 0;
-            this.comboBoxNamePort.DropDown += new System.EventHandler(this.comboBoxNamePort_DropDown);
-            this.comboBoxNamePort.SelectedIndexChanged += new System.EventHandler(this.comboBoxNamePort_SelectedIndexChanged);
+            this.buttonConnect.Location = new System.Drawing.Point(260, 18);
+            this.buttonConnect.Name = "buttonConnect";
+            this.buttonConnect.Size = new System.Drawing.Size(128, 23);
+            this.buttonConnect.TabIndex = 2;
+            this.buttonConnect.Text = "Подключить";
+            this.buttonConnect.UseVisualStyleBackColor = true;
+            this.buttonConnect.Click += new System.EventHandler(this.buttonConnect_Click);
             // 
             // labelPort
             // 
@@ -93,15 +92,16 @@
             this.labelPort.Text = "Порт подключения:";
             this.labelPort.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // buttonConnect
+            // comboBoxNamePort
             // 
-            this.buttonConnect.Location = new System.Drawing.Point(260, 18);
-            this.buttonConnect.Name = "buttonConnect";
-            this.buttonConnect.Size = new System.Drawing.Size(128, 23);
-            this.buttonConnect.TabIndex = 2;
-            this.buttonConnect.Text = "Подключить";
-            this.buttonConnect.UseVisualStyleBackColor = true;
-            this.buttonConnect.Click += new System.EventHandler(this.buttonConnect_Click);
+            this.comboBoxNamePort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxNamePort.FormattingEnabled = true;
+            this.comboBoxNamePort.Location = new System.Drawing.Point(118, 19);
+            this.comboBoxNamePort.Name = "comboBoxNamePort";
+            this.comboBoxNamePort.Size = new System.Drawing.Size(78, 21);
+            this.comboBoxNamePort.TabIndex = 0;
+            this.comboBoxNamePort.DropDown += new System.EventHandler(this.comboBoxNamePort_DropDown);
+            this.comboBoxNamePort.SelectedIndexChanged += new System.EventHandler(this.comboBoxNamePort_SelectedIndexChanged);
             // 
             // groupBoxDac
             // 
@@ -119,146 +119,6 @@
             this.groupBoxDac.TabIndex = 1;
             this.groupBoxDac.TabStop = false;
             this.groupBoxDac.Text = "AD9173";
-            // 
-            // labelRefFreq
-            // 
-            this.labelRefFreq.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.labelRefFreq.Location = new System.Drawing.Point(10, 20);
-            this.labelRefFreq.Name = "labelRefFreq";
-            this.labelRefFreq.Size = new System.Drawing.Size(96, 20);
-            this.labelRefFreq.TabIndex = 0;
-            this.labelRefFreq.Text = "Опорная частота:";
-            this.labelRefFreq.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // textBoxRefFreq
-            // 
-            this.textBoxRefFreq.Location = new System.Drawing.Point(113, 20);
-            this.textBoxRefFreq.Name = "textBoxRefFreq";
-            this.textBoxRefFreq.Size = new System.Drawing.Size(76, 20);
-            this.textBoxRefFreq.TabIndex = 1;
-            this.textBoxRefFreq.Text = "3000";
-            this.textBoxRefFreq.TextChanged += new System.EventHandler(this.textBoxRefFreq_TextChanged);
-            // 
-            // label1
-            // 
-            this.label1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label1.Location = new System.Drawing.Point(195, 20);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(28, 20);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "МГц";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // labelRefOut
-            // 
-            this.labelRefOut.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.labelRefOut.Location = new System.Drawing.Point(10, 48);
-            this.labelRefOut.Name = "labelRefOut";
-            this.labelRefOut.Size = new System.Drawing.Size(47, 21);
-            this.labelRefOut.TabIndex = 3;
-            this.labelRefOut.Text = "Ref Out:";
-            this.labelRefOut.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // comboBoxRefOut
-            // 
-            this.comboBoxRefOut.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxRefOut.FormattingEnabled = true;
-            this.comboBoxRefOut.Items.AddRange(new object[] {
-            "Отключен",
-            "/ 1",
-            "/ 2",
-            "/ 3",
-            "/ 4"});
-            this.comboBoxRefOut.Location = new System.Drawing.Point(113, 48);
-            this.comboBoxRefOut.Name = "comboBoxRefOut";
-            this.comboBoxRefOut.Size = new System.Drawing.Size(110, 21);
-            this.comboBoxRefOut.TabIndex = 4;
-            this.comboBoxRefOut.SelectedIndexChanged += new System.EventHandler(this.comboBoxRefOut_SelectedIndexChanged);
-            // 
-            // buttonReset
-            // 
-            this.buttonReset.Location = new System.Drawing.Point(260, 16);
-            this.buttonReset.Name = "buttonReset";
-            this.buttonReset.Size = new System.Drawing.Size(128, 53);
-            this.buttonReset.TabIndex = 5;
-            this.buttonReset.Text = "Сброс";
-            this.buttonReset.UseVisualStyleBackColor = true;
-            this.buttonReset.Click += new System.EventHandler(this.buttonReset_Click);
-            // 
-            // groupBoxChannel1
-            // 
-            this.groupBoxChannel1.Controls.Add(this.checkBoxChannel1);
-            this.groupBoxChannel1.Controls.Add(this.label2);
-            this.groupBoxChannel1.Controls.Add(this.textBoxAmp1);
-            this.groupBoxChannel1.Controls.Add(this.labelAmp1);
-            this.groupBoxChannel1.Controls.Add(this.textBoxFreq1);
-            this.groupBoxChannel1.Controls.Add(this.labelFreq1);
-            this.groupBoxChannel1.Location = new System.Drawing.Point(10, 75);
-            this.groupBoxChannel1.Name = "groupBoxChannel1";
-            this.groupBoxChannel1.Size = new System.Drawing.Size(186, 92);
-            this.groupBoxChannel1.TabIndex = 6;
-            this.groupBoxChannel1.TabStop = false;
-            this.groupBoxChannel1.Text = "Канал 1";
-            // 
-            // labelFreq1
-            // 
-            this.labelFreq1.Location = new System.Drawing.Point(6, 16);
-            this.labelFreq1.Name = "labelFreq1";
-            this.labelFreq1.Size = new System.Drawing.Size(52, 20);
-            this.labelFreq1.TabIndex = 0;
-            this.labelFreq1.Text = "Частота:";
-            this.labelFreq1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // textBoxFreq1
-            // 
-            this.textBoxFreq1.Location = new System.Drawing.Point(77, 17);
-            this.textBoxFreq1.Name = "textBoxFreq1";
-            this.textBoxFreq1.Size = new System.Drawing.Size(71, 20);
-            this.textBoxFreq1.TabIndex = 1;
-            this.textBoxFreq1.Text = "1235.4";
-            this.textBoxFreq1.TextChanged += new System.EventHandler(this.textBoxFreq1_TextChanged);
-            // 
-            // labelAmp1
-            // 
-            this.labelAmp1.Location = new System.Drawing.Point(6, 42);
-            this.labelAmp1.Name = "labelAmp1";
-            this.labelAmp1.Size = new System.Drawing.Size(65, 20);
-            this.labelAmp1.TabIndex = 2;
-            this.labelAmp1.Text = "Амплитуда:";
-            this.labelAmp1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // textBoxAmp1
-            // 
-            this.textBoxAmp1.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.textBoxAmp1.Location = new System.Drawing.Point(77, 43);
-            this.textBoxAmp1.MaxLength = 4;
-            this.textBoxAmp1.Name = "textBoxAmp1";
-            this.textBoxAmp1.Size = new System.Drawing.Size(71, 20);
-            this.textBoxAmp1.TabIndex = 3;
-            this.textBoxAmp1.Text = "50FF";
-            this.textBoxAmp1.TextChanged += new System.EventHandler(this.textBoxAmp1_TextChanged);
-            // 
-            // label2
-            // 
-            this.label2.Location = new System.Drawing.Point(151, 16);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(28, 20);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "МГц";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // checkBoxChannel1
-            // 
-            this.checkBoxChannel1.AutoSize = true;
-            this.checkBoxChannel1.Checked = true;
-            this.checkBoxChannel1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxChannel1.Location = new System.Drawing.Point(9, 68);
-            this.checkBoxChannel1.Name = "checkBoxChannel1";
-            this.checkBoxChannel1.Size = new System.Drawing.Size(75, 17);
-            this.checkBoxChannel1.TabIndex = 5;
-            this.checkBoxChannel1.Text = "Включить";
-            this.checkBoxChannel1.UseVisualStyleBackColor = true;
-            this.checkBoxChannel1.CheckedChanged += new System.EventHandler(this.checkBoxChannel1_CheckedChanged);
             // 
             // groupBoxChannel2
             // 
@@ -305,8 +165,8 @@
             this.textBoxAmp2.Name = "textBoxAmp2";
             this.textBoxAmp2.Size = new System.Drawing.Size(71, 20);
             this.textBoxAmp2.TabIndex = 3;
-            this.textBoxAmp2.Text = "50FF";
-            this.textBoxAmp2.TextChanged += new System.EventHandler(this.textBoxAmp2_TextChanged);
+            this.textBoxAmp2.Text = "0";
+            this.textBoxAmp2.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxAmp2_KeyUp);
             // 
             // labelAmp2
             // 
@@ -323,8 +183,9 @@
             this.textBoxFreq2.Name = "textBoxFreq2";
             this.textBoxFreq2.Size = new System.Drawing.Size(71, 20);
             this.textBoxFreq2.TabIndex = 1;
-            this.textBoxFreq2.Text = "100";
+            this.textBoxFreq2.Text = "0";
             this.textBoxFreq2.TextChanged += new System.EventHandler(this.textBoxFreq2_TextChanged);
+            this.textBoxFreq2.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxFreq2_KeyUp);
             // 
             // labelFreq2
             // 
@@ -334,6 +195,148 @@
             this.labelFreq2.TabIndex = 0;
             this.labelFreq2.Text = "Частота:";
             this.labelFreq2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // groupBoxChannel1
+            // 
+            this.groupBoxChannel1.Controls.Add(this.checkBoxChannel1);
+            this.groupBoxChannel1.Controls.Add(this.label2);
+            this.groupBoxChannel1.Controls.Add(this.textBoxAmp1);
+            this.groupBoxChannel1.Controls.Add(this.labelAmp1);
+            this.groupBoxChannel1.Controls.Add(this.textBoxFreq1);
+            this.groupBoxChannel1.Controls.Add(this.labelFreq1);
+            this.groupBoxChannel1.Location = new System.Drawing.Point(10, 75);
+            this.groupBoxChannel1.Name = "groupBoxChannel1";
+            this.groupBoxChannel1.Size = new System.Drawing.Size(186, 92);
+            this.groupBoxChannel1.TabIndex = 6;
+            this.groupBoxChannel1.TabStop = false;
+            this.groupBoxChannel1.Text = "Канал 1";
+            // 
+            // checkBoxChannel1
+            // 
+            this.checkBoxChannel1.AutoSize = true;
+            this.checkBoxChannel1.Checked = true;
+            this.checkBoxChannel1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxChannel1.Location = new System.Drawing.Point(9, 68);
+            this.checkBoxChannel1.Name = "checkBoxChannel1";
+            this.checkBoxChannel1.Size = new System.Drawing.Size(75, 17);
+            this.checkBoxChannel1.TabIndex = 5;
+            this.checkBoxChannel1.Text = "Включить";
+            this.checkBoxChannel1.UseVisualStyleBackColor = true;
+            this.checkBoxChannel1.CheckedChanged += new System.EventHandler(this.checkBoxChannel1_CheckedChanged);
+            // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(151, 16);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(28, 20);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "МГц";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // textBoxAmp1
+            // 
+            this.textBoxAmp1.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.textBoxAmp1.Location = new System.Drawing.Point(77, 43);
+            this.textBoxAmp1.MaxLength = 4;
+            this.textBoxAmp1.Name = "textBoxAmp1";
+            this.textBoxAmp1.Size = new System.Drawing.Size(71, 20);
+            this.textBoxAmp1.TabIndex = 3;
+            this.textBoxAmp1.Text = "0";
+            this.textBoxAmp1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxAmp1_KeyUp);
+            // 
+            // labelAmp1
+            // 
+            this.labelAmp1.Location = new System.Drawing.Point(6, 42);
+            this.labelAmp1.Name = "labelAmp1";
+            this.labelAmp1.Size = new System.Drawing.Size(65, 20);
+            this.labelAmp1.TabIndex = 2;
+            this.labelAmp1.Text = "Амплитуда:";
+            this.labelAmp1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // textBoxFreq1
+            // 
+            this.textBoxFreq1.Location = new System.Drawing.Point(77, 17);
+            this.textBoxFreq1.Name = "textBoxFreq1";
+            this.textBoxFreq1.Size = new System.Drawing.Size(71, 20);
+            this.textBoxFreq1.TabIndex = 1;
+            this.textBoxFreq1.Text = "0";
+            this.textBoxFreq1.TextChanged += new System.EventHandler(this.textBoxFreq1_TextChanged);
+            this.textBoxFreq1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxFreq1_KeyUp);
+            // 
+            // labelFreq1
+            // 
+            this.labelFreq1.Location = new System.Drawing.Point(6, 16);
+            this.labelFreq1.Name = "labelFreq1";
+            this.labelFreq1.Size = new System.Drawing.Size(52, 20);
+            this.labelFreq1.TabIndex = 0;
+            this.labelFreq1.Text = "Частота:";
+            this.labelFreq1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // buttonReset
+            // 
+            this.buttonReset.Location = new System.Drawing.Point(260, 16);
+            this.buttonReset.Name = "buttonReset";
+            this.buttonReset.Size = new System.Drawing.Size(128, 53);
+            this.buttonReset.TabIndex = 5;
+            this.buttonReset.Text = "Сброс";
+            this.buttonReset.UseVisualStyleBackColor = true;
+            this.buttonReset.Click += new System.EventHandler(this.buttonReset_Click);
+            // 
+            // comboBoxRefOut
+            // 
+            this.comboBoxRefOut.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxRefOut.FormattingEnabled = true;
+            this.comboBoxRefOut.Items.AddRange(new object[] {
+            "Отключен",
+            "/ 1",
+            "/ 2",
+            "/ 3",
+            "/ 4"});
+            this.comboBoxRefOut.Location = new System.Drawing.Point(113, 48);
+            this.comboBoxRefOut.Name = "comboBoxRefOut";
+            this.comboBoxRefOut.Size = new System.Drawing.Size(110, 21);
+            this.comboBoxRefOut.TabIndex = 4;
+            this.comboBoxRefOut.SelectedIndexChanged += new System.EventHandler(this.comboBoxRefOut_SelectedIndexChanged);
+            // 
+            // labelRefOut
+            // 
+            this.labelRefOut.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.labelRefOut.Location = new System.Drawing.Point(10, 48);
+            this.labelRefOut.Name = "labelRefOut";
+            this.labelRefOut.Size = new System.Drawing.Size(47, 21);
+            this.labelRefOut.TabIndex = 3;
+            this.labelRefOut.Text = "Ref Out:";
+            this.labelRefOut.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label1
+            // 
+            this.label1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label1.Location = new System.Drawing.Point(195, 20);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(28, 20);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "МГц";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // textBoxRefFreq
+            // 
+            this.textBoxRefFreq.Location = new System.Drawing.Point(113, 20);
+            this.textBoxRefFreq.Name = "textBoxRefFreq";
+            this.textBoxRefFreq.Size = new System.Drawing.Size(76, 20);
+            this.textBoxRefFreq.TabIndex = 1;
+            this.textBoxRefFreq.Text = "1000";
+            this.textBoxRefFreq.TextChanged += new System.EventHandler(this.textBoxRefFreq_TextChanged);
+            this.textBoxRefFreq.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxRefFreq_KeyUp);
+            // 
+            // labelRefFreq
+            // 
+            this.labelRefFreq.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.labelRefFreq.Location = new System.Drawing.Point(10, 20);
+            this.labelRefFreq.Name = "labelRefFreq";
+            this.labelRefFreq.Size = new System.Drawing.Size(96, 20);
+            this.labelRefFreq.TabIndex = 0;
+            this.labelRefFreq.Text = "Опорная частота:";
+            this.labelRefFreq.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // serialPort
             // 
@@ -350,13 +353,14 @@
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "DAC9173 Control";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBoxConect.ResumeLayout(false);
             this.groupBoxDac.ResumeLayout(false);
             this.groupBoxDac.PerformLayout();
-            this.groupBoxChannel1.ResumeLayout(false);
-            this.groupBoxChannel1.PerformLayout();
             this.groupBoxChannel2.ResumeLayout(false);
             this.groupBoxChannel2.PerformLayout();
+            this.groupBoxChannel1.ResumeLayout(false);
+            this.groupBoxChannel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
