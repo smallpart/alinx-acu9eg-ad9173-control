@@ -14,6 +14,7 @@ namespace alinx_control
     public partial class Form1 : Form
     {
         bool deviceIsConnect = false;
+        const Double dataRate = 336; // MHz
 
         public Form1()
         {
@@ -48,12 +49,14 @@ namespace alinx_control
             }
 
             // Set default values
-            textBoxRefFreq.Text = "3000";
-            textBoxFreq1.Text = "1235.4";
-            textBoxFreq2.Text = "100";
-            textBoxAmp1.Text = "50ff";
-            textBoxAmp2.Text = "50ff";
-            comboBoxRefOut.SelectedIndex = 3;
+            textBoxRefFreq.Text          = "6048";
+            textBoxFreq1.Text            = "1235.4";
+            textBoxFreq2.Text            = "100";
+            textBoxAmp1.Text             = "50ff";
+            textBoxAmp2.Text             = "50ff";
+            comboBoxRefOut.SelectedIndex = 2;
+            textBoxModeTime.Text         = "1";
+            textBoxModDeviation.Text     = "10";
         }
 
         private void comboBoxNamePort_SelectedIndexChanged(object sender, EventArgs e)
@@ -485,6 +488,176 @@ namespace alinx_control
 
                 tb.SelectionStart = position;
                 tb.SelectionLength = 0;
+            }
+        }
+
+        private void textBoxModeTime_TextChanged(object sender, EventArgs e)
+        {
+            TextBox tb = textBoxModeTime;
+
+            if ((tb.Text.CompareTo(".") != -1) || (tb.Text.CompareTo(",") != -1))
+            {
+                int position = tb.SelectionStart;
+
+                tb.Text = tb.Text.Replace(".", Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+                tb.Text = tb.Text.Replace(",", Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+
+                tb.SelectionStart = position;
+                tb.SelectionLength = 0;
+            }
+        }
+
+        private void textBoxModRate_TextChanged(object sender, EventArgs e)
+        {
+            TextBox tb = textBoxModDeviation;
+
+            if ((tb.Text.CompareTo(".") != -1) || (tb.Text.CompareTo(",") != -1))
+            {
+                int position = tb.SelectionStart;
+
+                tb.Text = tb.Text.Replace(".", Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+                tb.Text = tb.Text.Replace(",", Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+
+                tb.SelectionStart = position;
+                tb.SelectionLength = 0;
+            }
+        }
+
+        private void textBoxModeTime_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                try
+                {
+                    Double modDevTime = Convert.ToDouble(textBoxModeTime.Text);
+
+                    UInt32 code = Convert.ToUInt32(Math.Round(modDevTime * dataRate));
+
+                    byte[] data = new byte[8];
+                    foreach (byte b in data)
+                    {
+                        data[b] = 0x00;
+                    }
+                    data[0] = 0x2c;
+                    data[2] = 0x00;
+                    data[4] = Convert.ToByte((code >> 0) & 0xff);
+                    data[5] = Convert.ToByte((code >> 8) & 0xff);
+                    data[6] = Convert.ToByte((code >> 16) & 0xff);
+                    data[7] = Convert.ToByte((code >> 24) & 0xff);
+
+                    textBoxModeTime.Select(0, textBoxModeTime.Text.Length);
+
+                    if (deviceIsConnect)
+                    {
+                        serialPort.Write(data, 0, data.Length);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+        private void textBoxModRate_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                try
+                {
+                    Double modDev     = Convert.ToDouble(textBoxModDeviation.Text);
+                    Double modDevTime = Convert.ToDouble(textBoxModeTime.Text);
+                    Double modRate    = modDev / modDevTime / dataRate;
+
+                    UInt64 code = Convert.ToUInt64(Math.Round(Math.Pow(2, 48) * (modRate / dataRate)));
+
+                    byte[] data = new byte[12];
+                    foreach (byte b in data)
+                    {
+                        data[b] = 0x00;
+                    }
+                    data[0] = 0x24;
+                    data[2] = 0x02;
+                    data[4] = Convert.ToByte((code >> 0) & 0xff);
+                    data[5] = Convert.ToByte((code >> 8) & 0xff);
+                    data[6] = Convert.ToByte((code >> 16) & 0xff);
+                    data[7] = Convert.ToByte((code >> 24) & 0xff);
+                    data[8] = Convert.ToByte((code >> 32) & 0xff);
+                    data[9] = Convert.ToByte((code >> 40) & 0xff);
+
+                    textBoxModDeviation.Select(0, textBoxModDeviation.Text.Length);
+
+                    if (deviceIsConnect)
+                    {
+                        serialPort.Write(data, 0, data.Length);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+        private void checkBoxModCh1_CheckedChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                byte[] data = new byte[6];
+                foreach (byte b in data)
+                {
+                    data[b] = 0x00;
+                }
+                data[0] = 0x29;
+                data[2] = 0x00;
+                if (checkBoxChannel1.Checked)
+                {
+                    data[4] = 0x01;
+                }
+                else
+                {
+                    data[4] = 0x00;
+                }
+
+                if (deviceIsConnect)
+                {
+                    serialPort.Write(data, 0, data.Length);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void checkBoxModCh2_CheckedChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                byte[] data = new byte[6];
+                foreach (byte b in data)
+                {
+                    data[b] = 0x00;
+                }
+                data[0] = 0x29;
+                data[2] = 0x01;
+                if (checkBoxChannel1.Checked)
+                {
+                    data[4] = 0x01;
+                }
+                else
+                {
+                    data[4] = 0x00;
+                }
+
+                if (deviceIsConnect)
+                {
+                    serialPort.Write(data, 0, data.Length);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
     }

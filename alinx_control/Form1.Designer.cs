@@ -55,10 +55,20 @@
             this.textBoxRefFreq = new System.Windows.Forms.TextBox();
             this.labelRefFreq = new System.Windows.Forms.Label();
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
+            this.groupBoxModulation = new System.Windows.Forms.GroupBox();
+            this.textBoxModDeviation = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.textBoxModeTime = new System.Windows.Forms.TextBox();
+            this.labelModDeviation = new System.Windows.Forms.Label();
+            this.labelModTime = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.checkBoxModCh1 = new System.Windows.Forms.CheckBox();
+            this.checkBoxModCh2 = new System.Windows.Forms.CheckBox();
             this.groupBoxConect.SuspendLayout();
             this.groupBoxDac.SuspendLayout();
             this.groupBoxChannel2.SuspendLayout();
             this.groupBoxChannel1.SuspendLayout();
+            this.groupBoxModulation.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxConect
@@ -342,11 +352,105 @@
             // 
             this.serialPort.BaudRate = 115200;
             // 
+            // groupBoxModulation
+            // 
+            this.groupBoxModulation.Controls.Add(this.checkBoxModCh2);
+            this.groupBoxModulation.Controls.Add(this.checkBoxModCh1);
+            this.groupBoxModulation.Controls.Add(this.label5);
+            this.groupBoxModulation.Controls.Add(this.textBoxModDeviation);
+            this.groupBoxModulation.Controls.Add(this.label4);
+            this.groupBoxModulation.Controls.Add(this.textBoxModeTime);
+            this.groupBoxModulation.Controls.Add(this.labelModDeviation);
+            this.groupBoxModulation.Controls.Add(this.labelModTime);
+            this.groupBoxModulation.Location = new System.Drawing.Point(12, 252);
+            this.groupBoxModulation.Name = "groupBoxModulation";
+            this.groupBoxModulation.Size = new System.Drawing.Size(398, 77);
+            this.groupBoxModulation.TabIndex = 2;
+            this.groupBoxModulation.TabStop = false;
+            this.groupBoxModulation.Text = "Модуляция";
+            // 
+            // textBoxModDeviation
+            // 
+            this.textBoxModDeviation.Location = new System.Drawing.Point(93, 45);
+            this.textBoxModDeviation.Name = "textBoxModDeviation";
+            this.textBoxModDeviation.Size = new System.Drawing.Size(100, 20);
+            this.textBoxModDeviation.TabIndex = 4;
+            this.textBoxModDeviation.TextChanged += new System.EventHandler(this.textBoxModRate_TextChanged);
+            this.textBoxModDeviation.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxModRate_KeyUp);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(199, 22);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(27, 13);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "мкс";
+            // 
+            // textBoxModeTime
+            // 
+            this.textBoxModeTime.Location = new System.Drawing.Point(93, 19);
+            this.textBoxModeTime.Name = "textBoxModeTime";
+            this.textBoxModeTime.Size = new System.Drawing.Size(100, 20);
+            this.textBoxModeTime.TabIndex = 2;
+            this.textBoxModeTime.TextChanged += new System.EventHandler(this.textBoxModeTime_TextChanged);
+            this.textBoxModeTime.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxModeTime_KeyUp);
+            // 
+            // labelModDeviation
+            // 
+            this.labelModDeviation.AutoSize = true;
+            this.labelModDeviation.Location = new System.Drawing.Point(7, 48);
+            this.labelModDeviation.Name = "labelModDeviation";
+            this.labelModDeviation.Size = new System.Drawing.Size(58, 13);
+            this.labelModDeviation.TabIndex = 1;
+            this.labelModDeviation.Text = "Девиация";
+            // 
+            // labelModTime
+            // 
+            this.labelModTime.AutoSize = true;
+            this.labelModTime.Location = new System.Drawing.Point(7, 22);
+            this.labelModTime.Name = "labelModTime";
+            this.labelModTime.Size = new System.Drawing.Size(80, 13);
+            this.labelModTime.TabIndex = 0;
+            this.labelModTime.Text = "Длительность";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(199, 48);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(28, 13);
+            this.label5.TabIndex = 5;
+            this.label5.Text = "МГц";
+            // 
+            // checkBoxModCh1
+            // 
+            this.checkBoxModCh1.AutoSize = true;
+            this.checkBoxModCh1.Location = new System.Drawing.Point(315, 18);
+            this.checkBoxModCh1.Name = "checkBoxModCh1";
+            this.checkBoxModCh1.Size = new System.Drawing.Size(66, 17);
+            this.checkBoxModCh1.TabIndex = 6;
+            this.checkBoxModCh1.Text = "Канал 1";
+            this.checkBoxModCh1.UseVisualStyleBackColor = true;
+            this.checkBoxModCh1.CheckedChanged += new System.EventHandler(this.checkBoxModCh1_CheckedChanged);
+            // 
+            // checkBoxModCh2
+            // 
+            this.checkBoxModCh2.AutoSize = true;
+            this.checkBoxModCh2.Location = new System.Drawing.Point(315, 47);
+            this.checkBoxModCh2.Name = "checkBoxModCh2";
+            this.checkBoxModCh2.Size = new System.Drawing.Size(66, 17);
+            this.checkBoxModCh2.TabIndex = 7;
+            this.checkBoxModCh2.Text = "Канал 2";
+            this.checkBoxModCh2.UseVisualStyleBackColor = true;
+            this.checkBoxModCh2.CheckedChanged += new System.EventHandler(this.checkBoxModCh2_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(425, 255);
+            this.ClientSize = new System.Drawing.Size(425, 339);
+            this.Controls.Add(this.groupBoxModulation);
             this.Controls.Add(this.groupBoxDac);
             this.Controls.Add(this.groupBoxConect);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -361,6 +465,8 @@
             this.groupBoxChannel2.PerformLayout();
             this.groupBoxChannel1.ResumeLayout(false);
             this.groupBoxChannel1.PerformLayout();
+            this.groupBoxModulation.ResumeLayout(false);
+            this.groupBoxModulation.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -393,6 +499,15 @@
         private System.Windows.Forms.TextBox textBoxFreq2;
         private System.Windows.Forms.Label labelFreq2;
         private System.IO.Ports.SerialPort serialPort;
+        private System.Windows.Forms.GroupBox groupBoxModulation;
+        private System.Windows.Forms.TextBox textBoxModDeviation;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox textBoxModeTime;
+        private System.Windows.Forms.Label labelModDeviation;
+        private System.Windows.Forms.Label labelModTime;
+        private System.Windows.Forms.CheckBox checkBoxModCh2;
+        private System.Windows.Forms.CheckBox checkBoxModCh1;
+        private System.Windows.Forms.Label label5;
     }
 }
 
