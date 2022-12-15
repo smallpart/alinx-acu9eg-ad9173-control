@@ -14,7 +14,7 @@ namespace alinx_control
     public partial class Form1 : Form
     {
         bool deviceIsConnect = false;
-        const Double dataRate = 336; // MHz
+        const Double dataRate = 400; // MHz
 
         public Form1()
         {
@@ -49,14 +49,18 @@ namespace alinx_control
             }
 
             // Set default values
-            textBoxRefFreq.Text          = "6048";
+            textBoxRefFreq.Text          = "9600";
             textBoxFreq1.Text            = "1235.4";
             textBoxFreq2.Text            = "100";
             textBoxAmp1.Text             = "50ff";
             textBoxAmp2.Text             = "50ff";
-            comboBoxRefOut.SelectedIndex = 2;
-            textBoxModeTime.Text         = "1";
-            textBoxModDeviation.Text     = "10";
+            comboBoxRefOut.SelectedIndex = 4;
+            textBoxOffsetCh1.Text        = "0";
+            textBoxOffsetCh2.Text        = "0";
+            textBoxModTimeCh1.Text       = "1";
+            textBoxModDeviationCh1.Text  = "10";
+            textBoxModTimeCh2.Text       = "1000";
+            textBoxModDeviationCh2.Text  = "1";
         }
 
         private void comboBoxNamePort_SelectedIndexChanged(object sender, EventArgs e)
@@ -252,9 +256,8 @@ namespace alinx_control
                 try
                 {
                     Double freq = Convert.ToDouble(textBoxFreq2.Text);
-                    Double refFreq = Convert.ToDouble(textBoxRefFreq.Text);
 
-                    UInt64 code = Convert.ToUInt64((freq / refFreq) * Math.Pow(2, 48));
+                    UInt64 code = Convert.ToUInt64(freq  * Math.Pow(10, 6));
 
                     byte[] data = new byte[12];
                     foreach (byte b in data)
@@ -262,7 +265,7 @@ namespace alinx_control
                         data[b] = 0x00;
                     }
                     data[0] = 0x24;
-                    data[2] = 0x01;
+                    data[2] = 0x02;
                     data[4] = Convert.ToByte((code >> 0) & 0xff);
                     data[5] = Convert.ToByte((code >> 8) & 0xff);
                     data[6] = Convert.ToByte((code >> 16) & 0xff);
@@ -291,9 +294,8 @@ namespace alinx_control
                 try
                 {
                     Double freq = Convert.ToDouble(textBoxFreq1.Text);
-                    Double refFreq = Convert.ToDouble(textBoxRefFreq.Text);
 
-                    UInt64 code = Convert.ToUInt64(Math.Round(Math.Pow(2, 48) * (freq / refFreq)));
+                    UInt64 code = Convert.ToUInt64(freq * Math.Pow(10, 6));
 
                     byte[] data = new byte[12];
                     foreach (byte b in data)
@@ -301,7 +303,7 @@ namespace alinx_control
                         data[b] = 0x00;
                     }
                     data[0] = 0x24;
-                    data[2] = 0x00;
+                    data[2] = 0x01;
                     data[4] = Convert.ToByte((code >> 0) & 0xff);
                     data[5] = Convert.ToByte((code >> 8) & 0xff);
                     data[6] = Convert.ToByte((code >> 16) & 0xff);
@@ -329,47 +331,29 @@ namespace alinx_control
             {
                 try
                 {
-                    Double refFreq = Convert.ToDouble(textBoxRefFreq.Text);
-                    Double freq1 = Convert.ToDouble(textBoxFreq1.Text);
-                    Double freq2 = Convert.ToDouble(textBoxFreq2.Text);
+                    Double freq = Convert.ToDouble(textBoxRefFreq.Text);
 
-                    UInt64 code1 = Convert.ToUInt64(Math.Round(Math.Pow(2, 48) * (freq1 / refFreq)));
-                    UInt64 code2 = Convert.ToUInt64(Math.Round(Math.Pow(2, 48) * (freq2 / refFreq)));
+                    UInt64 code = Convert.ToUInt64(freq * Math.Pow(10, 6));
 
-                    byte[] data1 = new byte[12];
-                    foreach (byte b in data1)
+                    byte[] data = new byte[12];
+                    foreach (byte b in data)
                     {
-                        data1[b] = 0x00;
+                        data[b] = 0x00;
                     }
-                    data1[0] = 0x24;
-                    data1[2] = 0x00;
-                    data1[4] = Convert.ToByte((code1 >> 0) & 0xff);
-                    data1[5] = Convert.ToByte((code1 >> 8) & 0xff);
-                    data1[6] = Convert.ToByte((code1 >> 16) & 0xff);
-                    data1[7] = Convert.ToByte((code1 >> 24) & 0xff);
-                    data1[8] = Convert.ToByte((code1 >> 32) & 0xff);
-                    data1[9] = Convert.ToByte((code1 >> 40) & 0xff);
-
-                    byte[] data2 = new byte[12];
-                    foreach (byte b in data2)
-                    {
-                        data2[b] = 0x00;
-                    }
-                    data2[0] = 0x24;
-                    data2[2] = 0x01;
-                    data2[4] = Convert.ToByte((code2 >> 0) & 0xff);
-                    data2[5] = Convert.ToByte((code2 >> 8) & 0xff);
-                    data2[6] = Convert.ToByte((code2 >> 16) & 0xff);
-                    data2[7] = Convert.ToByte((code2 >> 24) & 0xff);
-                    data2[8] = Convert.ToByte((code2 >> 32) & 0xff);
-                    data2[9] = Convert.ToByte((code2 >> 40) & 0xff);
+                    data[0] = 0x24;
+                    data[2] = 0x00;
+                    data[4] = Convert.ToByte((code >> 0) & 0xff);
+                    data[5] = Convert.ToByte((code >> 8) & 0xff);
+                    data[6] = Convert.ToByte((code >> 16) & 0xff);
+                    data[7] = Convert.ToByte((code >> 24) & 0xff);
+                    data[8] = Convert.ToByte((code >> 32) & 0xff);
+                    data[9] = Convert.ToByte((code >> 40) & 0xff);
 
                     textBoxRefFreq.Select(0, textBoxRefFreq.Text.Length);
 
                     if (deviceIsConnect)
                     {
-                        serialPort.Write(data1, 0, data1.Length);
-                        serialPort.Write(data2, 0, data2.Length);
+                        serialPort.Write(data, 0, data.Length);
                     }
                 }
                 catch (Exception ex)
@@ -493,7 +477,7 @@ namespace alinx_control
 
         private void textBoxModeTime_TextChanged(object sender, EventArgs e)
         {
-            TextBox tb = textBoxModeTime;
+            TextBox tb = textBoxModTimeCh1;
 
             if ((tb.Text.CompareTo(".") != -1) || (tb.Text.CompareTo(",") != -1))
             {
@@ -509,7 +493,7 @@ namespace alinx_control
 
         private void textBoxModRate_TextChanged(object sender, EventArgs e)
         {
-            TextBox tb = textBoxModDeviation;
+            TextBox tb = textBoxModDeviationCh1;
 
             if ((tb.Text.CompareTo(".") != -1) || (tb.Text.CompareTo(",") != -1))
             {
@@ -529,7 +513,7 @@ namespace alinx_control
             {
                 try
                 {
-                    Double modDevTime = Convert.ToDouble(textBoxModeTime.Text);
+                    Double modDevTime = Convert.ToDouble(textBoxModTimeCh1.Text);
 
                     UInt32 code = Convert.ToUInt32(Math.Round(modDevTime * dataRate));
 
@@ -545,7 +529,7 @@ namespace alinx_control
                     data[6] = Convert.ToByte((code >> 16) & 0xff);
                     data[7] = Convert.ToByte((code >> 24) & 0xff);
 
-                    textBoxModeTime.Select(0, textBoxModeTime.Text.Length);
+                    textBoxModTimeCh1.Select(0, textBoxModTimeCh1.Text.Length);
 
                     if (deviceIsConnect)
                     {
@@ -565,8 +549,8 @@ namespace alinx_control
             {
                 try
                 {
-                    Double modDev     = Convert.ToDouble(textBoxModDeviation.Text);
-                    Double modDevTime = Convert.ToDouble(textBoxModeTime.Text);
+                    Double modDev     = Convert.ToDouble(textBoxModDeviationCh1.Text);
+                    Double modDevTime = Convert.ToDouble(textBoxModTimeCh1.Text);
                     Double modRate    = modDev / modDevTime / dataRate;
 
                     UInt64 code = Convert.ToUInt64(Math.Round(Math.Pow(2, 48) * (modRate / dataRate)));
@@ -577,7 +561,7 @@ namespace alinx_control
                         data[b] = 0x00;
                     }
                     data[0] = 0x24;
-                    data[2] = 0x02;
+                    data[2] = 0x05;
                     data[4] = Convert.ToByte((code >> 0) & 0xff);
                     data[5] = Convert.ToByte((code >> 8) & 0xff);
                     data[6] = Convert.ToByte((code >> 16) & 0xff);
@@ -585,7 +569,7 @@ namespace alinx_control
                     data[8] = Convert.ToByte((code >> 32) & 0xff);
                     data[9] = Convert.ToByte((code >> 40) & 0xff);
 
-                    textBoxModDeviation.Select(0, textBoxModDeviation.Text.Length);
+                    textBoxModDeviationCh1.Select(0, textBoxModDeviationCh1.Text.Length);
 
                     if (deviceIsConnect)
                     {
@@ -658,6 +642,226 @@ namespace alinx_control
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void textBoxOffsetCh1_TextChanged(object sender, EventArgs e)
+        {
+            TextBox tb = textBoxOffsetCh1;
+
+            if ((tb.Text.CompareTo(".") != -1) || (tb.Text.CompareTo(",") != -1))
+            {
+                int position = tb.SelectionStart;
+
+                tb.Text = tb.Text.Replace(".", Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+                tb.Text = tb.Text.Replace(",", Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+
+                tb.SelectionStart = position;
+                tb.SelectionLength = 0;
+            }
+        }
+
+        private void textBoxOffsetCh2_TextChanged(object sender, EventArgs e)
+        {
+            TextBox tb = textBoxOffsetCh2;
+
+            if ((tb.Text.CompareTo(".") != -1) || (tb.Text.CompareTo(",") != -1))
+            {
+                int position = tb.SelectionStart;
+
+                tb.Text = tb.Text.Replace(".", Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+                tb.Text = tb.Text.Replace(",", Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+
+                tb.SelectionStart = position;
+                tb.SelectionLength = 0;
+            }
+        }
+
+        private void textBoxModTimeCh2_TextChanged(object sender, EventArgs e)
+        {
+            TextBox tb = textBoxModTimeCh2;
+
+            if ((tb.Text.CompareTo(".") != -1) || (tb.Text.CompareTo(",") != -1))
+            {
+                int position = tb.SelectionStart;
+
+                tb.Text = tb.Text.Replace(".", Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+                tb.Text = tb.Text.Replace(",", Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+
+                tb.SelectionStart = position;
+                tb.SelectionLength = 0;
+            }
+        }
+
+        private void textBoxModDeviationCh2_TextChanged(object sender, EventArgs e)
+        {
+            TextBox tb = textBoxModDeviationCh2;
+
+            if ((tb.Text.CompareTo(".") != -1) || (tb.Text.CompareTo(",") != -1))
+            {
+                int position = tb.SelectionStart;
+
+                tb.Text = tb.Text.Replace(".", Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+                tb.Text = tb.Text.Replace(",", Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+
+                tb.SelectionStart = position;
+                tb.SelectionLength = 0;
+            }
+        }
+
+        private void textBoxModTimeCh2_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                try
+                {
+                    Double modDevTime = Convert.ToDouble(textBoxModTimeCh1.Text);
+
+                    UInt32 code = Convert.ToUInt32(Math.Round(modDevTime * dataRate));
+
+                    byte[] data = new byte[8];
+                    foreach (byte b in data)
+                    {
+                        data[b] = 0x00;
+                    }
+                    data[0] = 0x2c;
+                    data[2] = 0x01;
+                    data[4] = Convert.ToByte((code >> 0) & 0xff);
+                    data[5] = Convert.ToByte((code >> 8) & 0xff);
+                    data[6] = Convert.ToByte((code >> 16) & 0xff);
+                    data[7] = Convert.ToByte((code >> 24) & 0xff);
+
+                    textBoxModTimeCh2.Select(0, textBoxModTimeCh2.Text.Length);
+
+                    if (deviceIsConnect)
+                    {
+                        serialPort.Write(data, 0, data.Length);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+        private void textBoxOffsetCh1_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                try
+                {
+                    Double modDev = Convert.ToDouble(textBoxModDeviationCh1.Text);
+                    Double modDevTime = Convert.ToDouble(textBoxModTimeCh1.Text);
+                    Double modRate = modDev / modDevTime / dataRate;
+
+                    UInt64 code = Convert.ToUInt64(Math.Round(Math.Pow(2, 48) * (modRate / dataRate)));
+
+                    byte[] data = new byte[12];
+                    foreach (byte b in data)
+                    {
+                        data[b] = 0x00;
+                    }
+                    data[0] = 0x24;
+                    data[2] = 0x03;
+                    data[4] = Convert.ToByte((code >> 0) & 0xff);
+                    data[5] = Convert.ToByte((code >> 8) & 0xff);
+                    data[6] = Convert.ToByte((code >> 16) & 0xff);
+                    data[7] = Convert.ToByte((code >> 24) & 0xff);
+                    data[8] = Convert.ToByte((code >> 32) & 0xff);
+                    data[9] = Convert.ToByte((code >> 40) & 0xff);
+
+                    textBoxOffsetCh1.Select(0, textBoxOffsetCh1.Text.Length);
+
+                    if (deviceIsConnect)
+                    {
+                        serialPort.Write(data, 0, data.Length);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+        private void textBoxOffsetCh2_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                try
+                {
+                    Double modDev = Convert.ToDouble(textBoxModDeviationCh1.Text);
+                    Double modDevTime = Convert.ToDouble(textBoxModTimeCh1.Text);
+                    Double modRate = modDev / modDevTime / dataRate;
+
+                    UInt64 code = Convert.ToUInt64(Math.Round(Math.Pow(2, 48) * (modRate / dataRate)));
+
+                    byte[] data = new byte[12];
+                    foreach (byte b in data)
+                    {
+                        data[b] = 0x00;
+                    }
+                    data[0] = 0x24;
+                    data[2] = 0x04;
+                    data[4] = Convert.ToByte((code >> 0) & 0xff);
+                    data[5] = Convert.ToByte((code >> 8) & 0xff);
+                    data[6] = Convert.ToByte((code >> 16) & 0xff);
+                    data[7] = Convert.ToByte((code >> 24) & 0xff);
+                    data[8] = Convert.ToByte((code >> 32) & 0xff);
+                    data[9] = Convert.ToByte((code >> 40) & 0xff);
+
+                    textBoxOffsetCh2.Select(0, textBoxOffsetCh2.Text.Length);
+
+                    if (deviceIsConnect)
+                    {
+                        serialPort.Write(data, 0, data.Length);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+        private void textBoxModDeviationCh2_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                try
+                {
+                    Double modDev = Convert.ToDouble(textBoxModDeviationCh1.Text);
+                    Double modDevTime = Convert.ToDouble(textBoxModTimeCh1.Text);
+                    Double modRate = modDev / modDevTime / dataRate;
+
+                    UInt64 code = Convert.ToUInt64(Math.Round(Math.Pow(2, 48) * (modRate / dataRate)));
+
+                    byte[] data = new byte[12];
+                    foreach (byte b in data)
+                    {
+                        data[b] = 0x00;
+                    }
+                    data[0] = 0x24;
+                    data[2] = 0x06;
+                    data[4] = Convert.ToByte((code >> 0) & 0xff);
+                    data[5] = Convert.ToByte((code >> 8) & 0xff);
+                    data[6] = Convert.ToByte((code >> 16) & 0xff);
+                    data[7] = Convert.ToByte((code >> 24) & 0xff);
+                    data[8] = Convert.ToByte((code >> 32) & 0xff);
+                    data[9] = Convert.ToByte((code >> 40) & 0xff);
+
+                    textBoxModDeviationCh2.Select(0, textBoxModDeviationCh2.Text.Length);
+
+                    if (deviceIsConnect)
+                    {
+                        serialPort.Write(data, 0, data.Length);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
     }
