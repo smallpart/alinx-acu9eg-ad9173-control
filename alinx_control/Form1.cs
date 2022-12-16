@@ -105,12 +105,12 @@ namespace alinx_control
 
                     // Send parameters to device
                     KeyEventArgs ke = new KeyEventArgs(Keys.Enter);
-                    textBoxRefFreq_KeyUp(sender, ke);
-                    textBoxAmp1_KeyUp(sender, ke);
-                    textBoxAmp2_KeyUp(sender, ke);
-                    comboBoxRefOut_SelectedIndexChanged(sender, e);
-                    checkBoxChannel1_CheckedChanged(sender, e);
-                    checkBoxChannel2_CheckedChanged(sender, e);
+                    //textBoxRefFreq_KeyUp(sender, ke);
+                    //textBoxAmp1_KeyUp(sender, ke);
+                    //textBoxAmp2_KeyUp(sender, ke);
+                    //comboBoxRefOut_SelectedIndexChanged(sender, e);
+                    //checkBoxChannel1_CheckedChanged(sender, e);
+                    //checkBoxChannel2_CheckedChanged(sender, e);
                 } 
                 catch (Exception ex)
                 {
@@ -138,12 +138,12 @@ namespace alinx_control
             {
                 // Send parameters to device
                 KeyEventArgs ke = new KeyEventArgs(Keys.Enter);
-                textBoxRefFreq_KeyUp(sender, ke);
-                textBoxAmp1_KeyUp(sender, ke);
-                textBoxAmp2_KeyUp(sender, ke);
-                comboBoxRefOut_SelectedIndexChanged(sender, e);
-                checkBoxChannel1_CheckedChanged(sender, e);
-                checkBoxChannel2_CheckedChanged(sender, e);
+                //textBoxRefFreq_KeyUp(sender, ke);
+                //textBoxAmp1_KeyUp(sender, ke);
+                //textBoxAmp2_KeyUp(sender, ke);
+                //comboBoxRefOut_SelectedIndexChanged(sender, e);
+                //checkBoxChannel1_CheckedChanged(sender, e);
+                //checkBoxChannel2_CheckedChanged(sender, e);
 
                 // Send command "Reset"
                 byte[] data = new byte[6];
@@ -535,6 +535,9 @@ namespace alinx_control
                     {
                         serialPort.Write(data, 0, data.Length);
                     }
+
+                    // Change modulation rate
+                    textBoxModRate_KeyUp(sender, e);
                 }
                 catch (Exception ex)
                 {
@@ -594,7 +597,7 @@ namespace alinx_control
                 }
                 data[0] = 0x29;
                 data[2] = 0x00;
-                if (checkBoxChannel1.Checked)
+                if (checkBoxModCh1.Checked)
                 {
                     data[4] = 0x01;
                 }
@@ -625,7 +628,7 @@ namespace alinx_control
                 }
                 data[0] = 0x29;
                 data[2] = 0x01;
-                if (checkBoxChannel1.Checked)
+                if (checkBoxModCh2.Checked)
                 {
                     data[4] = 0x01;
                 }
@@ -715,7 +718,7 @@ namespace alinx_control
             {
                 try
                 {
-                    Double modDevTime = Convert.ToDouble(textBoxModTimeCh1.Text);
+                    Double modDevTime = Convert.ToDouble(textBoxModTimeCh2.Text);
 
                     UInt32 code = Convert.ToUInt32(Math.Round(modDevTime * dataRate));
 
@@ -737,6 +740,9 @@ namespace alinx_control
                     {
                         serialPort.Write(data, 0, data.Length);
                     }
+
+                    // Change modulation rate
+                    textBoxModDeviationCh2_KeyUp(sender, e);
                 }
                 catch (Exception ex)
                 {
@@ -751,11 +757,9 @@ namespace alinx_control
             {
                 try
                 {
-                    Double modDev = Convert.ToDouble(textBoxModDeviationCh1.Text);
-                    Double modDevTime = Convert.ToDouble(textBoxModTimeCh1.Text);
-                    Double modRate = modDev / modDevTime / dataRate;
+                    Double freq = Convert.ToDouble(textBoxOffsetCh1.Text);
 
-                    UInt64 code = Convert.ToUInt64(Math.Round(Math.Pow(2, 48) * (modRate / dataRate)));
+                    UInt64 code = Convert.ToUInt64(Math.Round(Math.Pow(2, 48) * (freq / dataRate)));
 
                     byte[] data = new byte[12];
                     foreach (byte b in data)
@@ -791,11 +795,9 @@ namespace alinx_control
             {
                 try
                 {
-                    Double modDev = Convert.ToDouble(textBoxModDeviationCh1.Text);
-                    Double modDevTime = Convert.ToDouble(textBoxModTimeCh1.Text);
-                    Double modRate = modDev / modDevTime / dataRate;
+                    Double freq = Convert.ToDouble(textBoxOffsetCh2.Text);
 
-                    UInt64 code = Convert.ToUInt64(Math.Round(Math.Pow(2, 48) * (modRate / dataRate)));
+                    UInt64 code = Convert.ToUInt64(Math.Round(Math.Pow(2, 48) * (freq / dataRate)));
 
                     byte[] data = new byte[12];
                     foreach (byte b in data)
@@ -831,8 +833,8 @@ namespace alinx_control
             {
                 try
                 {
-                    Double modDev = Convert.ToDouble(textBoxModDeviationCh1.Text);
-                    Double modDevTime = Convert.ToDouble(textBoxModTimeCh1.Text);
+                    Double modDev = Convert.ToDouble(textBoxModDeviationCh2.Text);
+                    Double modDevTime = Convert.ToDouble(textBoxModTimeCh2.Text);
                     Double modRate = modDev / modDevTime / dataRate;
 
                     UInt64 code = Convert.ToUInt64(Math.Round(Math.Pow(2, 48) * (modRate / dataRate)));
